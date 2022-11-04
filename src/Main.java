@@ -30,22 +30,49 @@ public class Main {
     }
 
     public static void printInfo(List<Integer> numbers) {
-        Set<Integer> distinctNumbers = new LinkedHashSet<>(numbers);
-        int max = distinctNumbers
-                .stream()
-                .mapToInt(n -> n)
-                .max().orElseThrow(NoSuchElementException::new);
-        int min = distinctNumbers
-                .stream()
-                .mapToInt(n -> n)
-                .min().orElseThrow(NoSuchElementException::new);
-        distinctNumbers
-                .stream()
-                .sorted()
-                .forEach(n -> System.out.print(n + " "));
+        List<Integer> distinctNumbers = getDistinctNumbers(numbers);
+        printSortedNumbers(distinctNumbers);
         System.out.println("\ncount: " + numbers.size());
         System.out.println("distinct: " + distinctNumbers.size());
-        System.out.println("min: " + min);
-        System.out.println("max: " + max);
+        printMinMaxNumber(numbers);
+    }
+
+    public static List<Integer> getDistinctNumbers(List<Integer> numbers) {
+        List<Integer> tempList = new ArrayList<>();
+        for (Integer number : numbers) {
+            if (!tempList.contains(number)) {
+                tempList.add(number);
+            }
+        }
+        return tempList;
+    }
+
+    public static void printMinMaxNumber(List<Integer> numbers) {
+        int min = numbers.get(0);
+        int max = min;
+        for (int i = 0; i < numbers.size(); i++) {
+            if (numbers.get(i) < min) min = numbers.get(i);
+            if (numbers.get(i) > max) max = numbers.get(i);
+        }
+        System.out.println("min = " + min);
+        System.out.println("max = " + max);
+    }
+
+    public static void printSortedNumbers(List<Integer> numbers) {
+        int[] tab = new int[numbers.size()];
+        for (int i = 0; i < numbers.size(); i++) {
+            tab[i] = numbers.get(i);
+        }
+        int temp;
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = i + 1; j < tab.length; j++) {
+                if (tab[i] > tab[j]) {
+                    temp = tab[i];
+                    tab[i] = tab[j];
+                    tab[j] = temp;
+                }
+            }
+        }
+        for (int number : tab) System.out.print(number + " ");
     }
 }
