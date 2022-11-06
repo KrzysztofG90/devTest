@@ -1,10 +1,9 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Graph {
-    private List<Integer> vertices = new ArrayList<>();
+    private List<Integer> vertices;
 
     public Graph(List<Integer> vertices) {
         this.vertices = vertices;
