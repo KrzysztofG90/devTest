@@ -1,14 +1,16 @@
+package service;
+
 import model.UserInput;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 public class UserInputServiceImpl implements UserInputService {
+
     @Override
     public UserInput getInputFromFile() throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
@@ -30,15 +32,16 @@ public class UserInputServiceImpl implements UserInputService {
     }
 
     @Override
-    public UserInput getInputFromKeyboard() {
+    public UserInput getInputFromKeyboard(boolean isSecondTask) {
         Scanner scanner = new Scanner(System.in);
         List<Integer> givenNumbers = new ArrayList<>();
         boolean isEnd = false;
         int sum = 0;
 
         System.out.println("Input a list of numbers separated by a space.");
-        System.out.println("Then input the sum of the pairs which you want to find.");
-        System.out.println("Confirm by pressing enter.\n");
+       if (isSecondTask )System.out.println("Then input the sum of the pairs which you want to find.");
+        System.out.println("Confirm by pressing enter.");
+        System.out.println("--------------------------------------");
         while (!isEnd) {
             if (givenNumbers.isEmpty()) {
                 System.out.println("Input numbers:");
@@ -52,43 +55,48 @@ public class UserInputServiceImpl implements UserInputService {
                     } else givenNumbers.add(Integer.parseInt(s));
                 }
             } else {
-                System.out.println("Provide sum:");
-                String abc = scanner.nextLine();
-                if (abc.matches("[0-9]+")) {
-                    sum = Integer.parseInt(abc);
-                    isEnd = true;
-                } else System.out.println("Provide only one number!");
+                if (isSecondTask) {
+                    System.out.println("Provide sum:");
+                    String abc = scanner.nextLine();
+                    if (abc.matches("[0-9]+")) {
+                        sum = Integer.parseInt(abc);
+                        isEnd = true;
+                    } else System.out.println("Provide only one number!");
+                } else isEnd = true;
             }
         }
-        scanner.close();
         return new UserInput(givenNumbers, sum);
     }
 
     @Override
-    public void printPairsOfGivenSum(int choice) throws IOException {
+    public UserInput getInputFromUser(boolean isSecondTask) throws IOException {
+        Scanner scanner = new Scanner(System.in);
         UserInput userInput = new UserInput();
-        switch (choice) {
-            case 1:
-                userInput = getInputFromKeyboard();
-                break;
-            case 2:
-                userInput = getInputFromFile();
-                break;
-        }
-
-        System.out.println("Result:");
-        List<Integer> numbers = userInput.getNumbers();
-        int sum = userInput.getSum();
-        int numberOfPairs = 0;
-        numbers.sort(Comparator.comparingInt(a -> a));
-        for (int i = 0; i < numbers.size(); i++) {
-            for (int j = i + 1; j < numbers.size(); j++) {
-                if (numbers.get(i) + numbers.get(j) == sum) {
-                    numberOfPairs++;
-                    System.out.println(numbers.get(i) + " " + numbers.get(j));
+        boolean isChoosingType = true;
+        while (isChoosingType) {
+            System.out.println("Select an input type for numbers:");
+            System.out.println("1. Enter '1' for input from keyboard");
+            System.out.println("2. Enter '2' for input from file");
+            System.out.println("--------------------------------------");
+            String choice = scanner.nextLine();
+            if (choice.matches("[0-9]+")) {
+                switch (Integer.parseInt(choice)) {
+                    case 1:
+                        userInput = getInputFromKeyboard(isSecondTask);
+                        isChoosingType = false;
+                        break;
+                    case 2:
+                        userInput = getInputFromFile();
+                        isChoosingType = false;
+                        break;
+                    default:
+                        System.out.println("There is no such choice!");
+                        break;
                 }
+            } else {
+                System.out.println("Provide only numbers!");
             }
         }
-        if (numberOfPairs == 0) System.out.println("There are no matching pairs.");
+        return userInput;
     }
 }

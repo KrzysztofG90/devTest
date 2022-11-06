@@ -11,6 +11,10 @@ public class UserInput {
         this.sum = sum;
     }
 
+    public UserInput(List<Integer> numbers) {
+        this.numbers = numbers;
+    }
+
     public UserInput() {
     }
 
