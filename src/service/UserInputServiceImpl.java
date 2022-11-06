@@ -94,7 +94,7 @@ public class UserInputServiceImpl implements UserInputService {
                         break;
                 }
             } else {
-                System.out.println("Provide only numbers!");
+                System.out.println("Provide only digit!");
             }
         }
         return userInput;

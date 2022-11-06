@@ -1,7 +1,4 @@
-import model.UserInput;
-
 import java.io.IOException;
-import java.util.*;
 
 public class Main {
     private static App app = new App();

@@ -8,13 +8,12 @@ public class App {
     private TaskService taskService = new TaskServiceImpl();
 
     public void selectTheTask() throws IOException {
-        boolean isChoosingType = true;
         Scanner scanner = new Scanner(System.in);
         System.out.println("--------------------------------------");
         System.out.println("Select the appropriate task by entering the correct number.");
         System.out.println("Enter 'exit' to close app.");
         System.out.println("--------------------------------------");
-        while (isChoosingType) {
+        while (true) {
             System.out.println("---------- Main menu -----------------");
             System.out.println("Select the task:");
             System.out.println("1. Enter '1' for the first task.");
@@ -38,10 +37,7 @@ public class App {
                         break;
                 }
             } else {
-                if (choice.equals("exit")) {
-                    isChoosingType = false;
-                    System.exit(0);
-                }
+                if (choice.equals("exit")) System.exit(0);
                 else System.out.println("Provide only numbers!");
             }
         }
