@@ -7,4 +7,5 @@ public interface TaskService {
 
     void printPairsOfGivenSumTask2() throws IOException;
 
+    void printNumberOfGraphsTask3() throws IOException;
 }

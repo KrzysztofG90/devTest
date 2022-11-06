@@ -15,6 +15,7 @@ public class App {
         System.out.println("Enter 'exit' to close app.");
         System.out.println("--------------------------------------");
         while (isChoosingType) {
+            System.out.println("---------- Main menu -----------------");
             System.out.println("Select the task:");
             System.out.println("1. Enter '1' for the first task.");
             System.out.println("2. Enter '2' for the second task.");
@@ -30,7 +31,7 @@ public class App {
                         taskService.printPairsOfGivenSumTask2();
                         break;
                     case 3:
-                        System.out.println("TASK 3");
+                        taskService.printNumberOfGraphsTask3();
                         break;
                     default:
                         System.out.println("There is no such choice!");

@@ -12,14 +12,14 @@ import java.util.Scanner;
 public class UserInputServiceImpl implements UserInputService {
 
     @Override
-    public UserInput getInputFromFile() throws IOException {
+    public UserInput getInputFromFile(String fileSrc) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
-        String line;
         List<Integer> numbers = new ArrayList<>();
-        try (BufferedReader fileReader = new BufferedReader(new FileReader("src/resources/input"))) {
+        String line;
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(fileSrc))) {
             while ((line = fileReader.readLine()) != null) {
                 Scanner sc = new Scanner(line);
-                stringBuilder.append(sc.nextLine().trim());
+                stringBuilder.append(sc.nextLine()).append(" ");
             }
         } catch (IOException e) {
             throw new IOException("Error processing the file.");
@@ -39,7 +39,7 @@ public class UserInputServiceImpl implements UserInputService {
         int sum = 0;
 
         System.out.println("Input a list of numbers separated by a space.");
-       if (isSecondTask )System.out.println("Then input the sum of the pairs which you want to find.");
+        if (isSecondTask) System.out.println("Then input the sum of the pairs which you want to find.");
         System.out.println("Confirm by pressing enter.");
         System.out.println("--------------------------------------");
         while (!isEnd) {
@@ -69,7 +69,7 @@ public class UserInputServiceImpl implements UserInputService {
     }
 
     @Override
-    public UserInput getInputFromUser(boolean isSecondTask) throws IOException {
+    public UserInput getInputFromUser(boolean isSecondTask, String fileSrc) throws IOException {
         Scanner scanner = new Scanner(System.in);
         UserInput userInput = new UserInput();
         boolean isChoosingType = true;
@@ -86,7 +86,7 @@ public class UserInputServiceImpl implements UserInputService {
                         isChoosingType = false;
                         break;
                     case 2:
-                        userInput = getInputFromFile();
+                        userInput = getInputFromFile(fileSrc);
                         isChoosingType = false;
                         break;
                     default:
