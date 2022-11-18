@@ -26,7 +26,7 @@ public class UserInputServiceImpl implements UserInputService {
         }
         String[] lines = stringBuilder.toString().split(" ");
         for (String s : lines) {
-            if (s.matches("[0-9]+")) numbers.add(Integer.parseInt(s));
+            if (s.matches("-?[0-9]+")) numbers.add(Integer.parseInt(s));
         }
         return new UserInput(numbers, 13);
     }
@@ -48,7 +48,7 @@ public class UserInputServiceImpl implements UserInputService {
                 String input = scanner.nextLine();
                 String[] tab = input.split(" ");
                 for (String s : tab) {
-                    if (!s.matches("[0-9]+")) {
+                    if (!s.matches("-?[0-9]+")) {
                         System.out.println("Provide only numbers!");
                         givenNumbers.clear();
                         break;
@@ -58,7 +58,7 @@ public class UserInputServiceImpl implements UserInputService {
                 if (isSecondTask) {
                     System.out.println("Provide sum:");
                     String abc = scanner.nextLine();
-                    if (abc.matches("[0-9]+")) {
+                    if (abc.matches("-?[0-9]+")) {
                         sum = Integer.parseInt(abc);
                         isEnd = true;
                     } else System.out.println("Provide only one number!");
