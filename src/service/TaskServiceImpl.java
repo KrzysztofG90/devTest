@@ -1,10 +1,10 @@
 package service;
 
-import model.Graph;
 import model.UserInput;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TaskServiceImpl implements TaskService {
     private UserInputService userInputService = new UserInputServiceImpl();
@@ -59,44 +59,55 @@ public class TaskServiceImpl implements TaskService {
     public void printNumberOfGraphsTask3() throws IOException {
         UserInput userInput = userInputService.getInputFromFile("src/resources/input2");
         List<Integer> inputNumbers = userInput.getNumbers();
-        List<Integer> listOfVertices = getListOfUniqueVertices(inputNumbers);
-        List<Graph> listOfGraphs = getListOfGraphs(listOfVertices);
+        int[][] pairsOfVertices = new int[inputNumbers.get(0)][];
+        inputNumbers.remove(0);
 
-        System.out.println("There are `" + listOfGraphs.size() + "` separate graphs at the input");
-        System.out.println("And the are:");
-        for (int i = 0; i < listOfGraphs.size(); i++) {
+        for (int i = 0; i < inputNumbers.size() / 2 ; i++) {
+            for (int j = 0; j < inputNumbers.size(); j += 2) {
+                pairsOfVertices[i] = new int[]{inputNumbers.get(j), inputNumbers.get(j + 1)};
+                i++;
+            }
+        }
+
+        List<int[]> graphs = Arrays.stream(findPairs(pairsOfVertices)).collect(Collectors.toList());
+        System.out.println("There are `" + graphs.size() + "` separate graphs at the input");
+        System.out.println("And they are:");
+        for (int i = 0; i < graphs.size(); i++) {
             System.out.print((i + 1) + ". ");
-            System.out.println(listOfGraphs.get(i));
+            System.out.println(Arrays.toString(graphs.get(i)));
         }
         System.out.println("--------------------------------------");
     }
 
-    private List<Integer> getListOfUniqueVertices(List<Integer> numbers) {
-        Set<Integer> vertices = new HashSet<>();
-        for (int i = 0; i < numbers.size(); i++) {
-            for (Integer number : numbers) {
-                if (number == numbers.get(i) + 1) {
-                    vertices.add(numbers.get(i));
-                    vertices.add(number);
+
+    private int[][] findPairs(int[][] pairs) {
+        boolean foundMore = true;
+        while (foundMore) {
+            foundMore = false;
+            for (int i = 0; i < pairs.length; i++) {
+                for (int j = 0; j < pairs.length; j++) {
+                    for (int k = 0; k < pairs[i].length; k++) {
+                        if (i != j) {
+                            if (pairs[i][k] == pairs[j][0]) {
+                                Set<Integer> distinctVertices = new HashSet<>();
+                                for (int m = 0; m < pairs[i].length; m++) {
+                                    distinctVertices.add(pairs[i][m]);
+                                }
+                                for (int m = 0; m < pairs[j].length; m++) {
+                                    distinctVertices.add(pairs[j][m]);
+                                }
+                                pairs[i] = distinctVertices.stream().mapToInt(v -> v).toArray();
+                                List<int[]> listOfPairs = Arrays.stream(pairs).collect(Collectors.toList());
+                                listOfPairs.remove(pairs[j]);
+                                pairs = listOfPairs.toArray(new int[0][]);
+                                foundMore = true;
+                                if (j >= pairs.length) break;
+                            }
+                        }
+                    }
                 }
             }
         }
-        return new ArrayList<>(vertices);
-    }
-
-    private List<Graph> getListOfGraphs(List<Integer> listOfVertices) {
-        List<Graph> listOfGraphs = new ArrayList<>();
-        int countOfVertices = 0;
-
-        for (int i = 0; i < listOfVertices.size(); i++) {
-            if (i + 1 < listOfVertices.size()) {
-                if (listOfVertices.get(i + 1) == listOfVertices.get(i) + 1) countOfVertices++;
-                else {
-                    listOfGraphs.add(new Graph(new ArrayList<>(listOfVertices.subList(i - countOfVertices, i + 1))));
-                    countOfVertices = 0;
-                }
-            } else listOfGraphs.add(new Graph(new ArrayList<>(listOfVertices.subList(i - countOfVertices, i + 1))));
-        }
-        return listOfGraphs;
+        return pairs;
     }
 }
